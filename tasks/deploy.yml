@@ -16,7 +16,7 @@
     enabled: "yes"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] != ''"
+    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
     - "hostvars[inventory_hostname]['restic_exporter'] |
        community.general.json_query(vars['restic_exporter_enable']) is defined"
     - "hostvars[inventory_hostname]['restic_exporter'] |
@@ -30,7 +30,7 @@
     enabled: "yes"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] != ''"
+    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
     - "hostvars[inventory_hostname]['restic_exporter'] |
        community.general.json_query(vars['restic_exporter_enable']) is defined"
     - "hostvars[inventory_hostname]['restic_exporter'] |

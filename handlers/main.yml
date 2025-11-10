@@ -8,7 +8,7 @@
     state: "restarted"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] != ''"
+    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
     - "hostvars[inventory_hostname]['restic_exporter'] |
        community.general.json_query(vars['restic_exporter_restart']) is defined"
     - "hostvars[inventory_hostname]['restic_exporter'] |

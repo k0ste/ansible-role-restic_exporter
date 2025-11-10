@@ -15,14 +15,16 @@
       community.general.json_query('[].version | [0]') | default('latest') }}"
     restic_exporter_settings:
       "{{ hostvars[inventory_hostname]['restic_exporter'] |
-      community.general.json_query('[].settings[]') }}"
+      community.general.json_query('[].settings[]') | default(omit) }}"
     restic_exporter_port: "{{ hostvars[inventory_hostname]['restic_exporter'] |
-      community.general.json_query('[].settings[].port | [0]') }}"
+      community.general.json_query('[].settings[].port | [0]') | default(omit) }}"
+  when:
+    - "hostvars[inventory_hostname]['restic_exporter'] is defined"
+    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
 - name: "restic_exporter | Set facts about service port"
   ansible.builtin.set_fact:
     restic_exporter_port: "8001"
   when:
     - "(vars['restic_exporter_port'] is defined and
-      (vars['restic_exporter_port'] == '' or
-      vars['restic_exporter_port'] == []) or
-      vars['restic_exporter_port'] is not defined)"
+      vars['restic_exporter_port'] in ['', [], None]) or
+      vars['restic_exporter_port'] is not defined"

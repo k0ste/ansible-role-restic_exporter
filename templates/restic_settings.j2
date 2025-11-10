@@ -1,0 +1,58 @@
+{% if r['address'] is defined and r['address'] not in ['', [], None] %}
+{{ ' \\' }}
+{{ '-e "LISTEN_ADDRESS=' + r['address'] + '"' -}}
+{% endif %}
+{{ ' \\' }}
+{{ '-e "LISTEN_PORT=' ~ vars['restic_exporter_port'] ~ '"' -}}
+{% if r['refresh_interval'] is defined and r['refresh_interval']
+  not in ['', [], None] %}
+{{ ' \\' }}
+{{ '-e "REFRESH_INTERVAL=' ~ r['refresh_interval'] ~ '"' -}}
+{% endif %}
+{% if r['exit_on_error'] is defined and r['exit_on_error'] in
+  ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "EXIT_ON_ERROR=' + r['exit_on_error'] + '"' -}}
+{% endif %}
+{% if r['no_check'] is defined and r['no_check'] in ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "NO_CHECK=' + r['no_check'] + '"' -}}
+{% endif %}
+{% if r['no_stats'] is defined and r['no_stats'] in ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "NO_STATS=' + r['no_stats'] + '"' -}}
+{% endif %}
+{% if r['no_locks'] is defined and r['no_locks'] in ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "NO_LOCKS=' + r['no_locks'] + '"' -}}
+{% endif %}
+{% if r['include_paths'] is defined and r['include_paths'] in
+  ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "INCLUDE_PATHS=' + r['include_paths'] + '"' -}}
+{% endif %}
+{% if r['insecure'] is defined and r['insecure'] in
+  ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "INSECURE_TLS=' + r['insecure'] + '"' -}}
+{% endif %}
+{% if r['log_level'] is defined and r['log_level'] != '' %}
+{{ ' \\' }}
+{{ '-e "LOG_LEVEL=' + r['log_level'] + '"' -}}
+{% endif %}
+{% if r['access_key'] is defined and r['access_key'] != '' %}
+{{ ' \\' }}
+{{ '-e "AWS_ACCESS_KEY_ID=' + r['access_key'] + '"' -}}
+{% endif %}
+{% if r['secret_key'] is defined and r['secret_key'] != '' %}
+{{ ' \\' }}
+{{ '-e "AWS_SECRET_ACCESS_KEY=' + r['secret_key'] + '"' -}}
+{% endif %}
+{% if r['password'] is defined and r['password'] != '' %}
+{{ ' \\' }}
+{{ '-e "RESTIC_PASSWORD=' + r['password'] + '"' -}}
+{% endif %}
+{% if r['repo'] is defined and r['repo'] != '' %}
+{{ ' \\' }}
+{{ '-e "RESTIC_REPOSITORY=' + r['repo'] + '"' -}}
+{% endif %}

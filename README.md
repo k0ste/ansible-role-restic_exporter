@@ -48,8 +48,12 @@ restic_exporter:
         no_stats: 'true'
 # Do not collect the number of locks. Default is 'false' (collect the number of
 # locks)
-        no_locks: "false"
+        no_locks: 'false'
 # Include snapshot paths for each backup. The paths are separated by commas.
 # Default is 'false' (not collect the paths)
-        include_paths: "false"
+        include_paths: 'false'
+# Skip TLS verification for self-signed certificates. Default is 'false'
+        insecure: 'false'
+# Log level of the traces. The default is 'INFO'
+        log_level: 'info'
 ```

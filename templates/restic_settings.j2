@@ -1,11 +1,12 @@
-{% if r['address'] is defined and r['address'] not in ['', [], None] %}
+{% if r['address'] is defined and r['address'] not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "LISTEN_ADDRESS=' + r['address'] + '"' -}}
 {% endif %}
 {{ ' \\' }}
-{{ '-e "LISTEN_PORT=' ~ vars['restic_exporter_port'] ~ '"' -}}
+{{ '-e "LISTEN_PORT=' ~ lookup('ansible.builtin.vars',
+  'restic_exporter_port') ~ '"' -}}
 {% if r['refresh_interval'] is defined and r['refresh_interval']
-  not in ['', [], None] %}
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "REFRESH_INTERVAL=' ~ r['refresh_interval'] ~ '"' -}}
 {% endif %}
@@ -18,9 +19,15 @@
 {{ ' \\' }}
 {{ '-e "NO_CHECK=' + r['no_check'] + '"' -}}
 {% endif %}
-{% if r['no_stats'] is defined and r['no_stats'] in ['true', 'false'] %}
+{% if r['no_global_stats'] is defined and r['no_global_stats'] in
+  ['true', 'false'] %}
 {{ ' \\' }}
-{{ '-e "NO_STATS=' + r['no_stats'] + '"' -}}
+{{ '-e "NO_GLOBAL_STATS=' + r['no_global_stats'] + '"' -}}
+{% endif %}
+{% if r['no_legacy_stats'] is defined and r['no_legacy_stats'] in
+  ['true', 'false'] %}
+{{ ' \\' }}
+{{ '-e "NO_LEGACY_STATS=' + r['no_legacy_stats'] + '"' -}}
 {% endif %}
 {% if r['no_locks'] is defined and r['no_locks'] in ['true', 'false'] %}
 {{ ' \\' }}
@@ -36,23 +43,28 @@
 {{ ' \\' }}
 {{ '-e "INSECURE_TLS=' + r['insecure'] + '"' -}}
 {% endif %}
-{% if r['log_level'] is defined and r['log_level'] != '' %}
+{% if r['log_level'] is defined and r['log_level']
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "LOG_LEVEL=' + r['log_level'] + '"' -}}
 {% endif %}
-{% if r['access_key'] is defined and r['access_key'] != '' %}
+{% if r['access_key'] is defined and r['access_key']
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "AWS_ACCESS_KEY_ID=' + r['access_key'] + '"' -}}
 {% endif %}
-{% if r['secret_key'] is defined and r['secret_key'] != '' %}
+{% if r['secret_key'] is defined and r['secret_key']
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "AWS_SECRET_ACCESS_KEY=' + r['secret_key'] + '"' -}}
 {% endif %}
-{% if r['password'] is defined and r['password'] != '' %}
+{% if r['password'] is defined and r['password']
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "RESTIC_PASSWORD=' + r['password'] + '"' -}}
 {% endif %}
-{% if r['repo'] is defined and r['repo'] != '' %}
+{% if r['repo'] is defined and r['repo']
+  not in ['', [], '[]', None] %}
 {{ ' \\' }}
 {{ '-e "RESTIC_REPOSITORY=' + r['repo'] + '"' -}}
 {% endif %}

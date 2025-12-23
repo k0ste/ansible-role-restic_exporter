@@ -16,6 +16,8 @@ restic_exporter:
   # tag of container https://hub.docker.com/r/ngosang/restic-exporter
   # usually 'latest'
   - version: 'latest'
+    # docker package, should be in 'present' or 'latest'
+    package_state: 'latest'
     # enable exporter service or not (docker service will be enabled)
     enable: 'true'
     # restart exporter service or not (docker service will be started)
@@ -35,7 +37,7 @@ restic_exporter:
 # Port to listen
         port: '8001'
 # Refresh interval for the metrics in seconds. Computing the metrics is a
-# expensive task, keep this value as high as possible. Default is '60' seconds
+# expensive task, keep this value as high as possible. Default is '3600' seconds
         refresh_interval: '60'
 # Shutdown exporter on any restic error. Default is Flase (only log error,
 # such as network error with Cloud backends)
@@ -43,9 +45,15 @@ restic_exporter:
 # Do not perform restic check operation for performance reasons. Default is
 # 'false' (perform restic check)
         no_check: 'true'
+# Do not perform restic stats operation for performance reasons. Default is
+# 'false' (perform restic stats)
+        no_global_stats: 'true'
 # Do not collect per backup statistics for performance reasons. Default is
 # 'false' (collect per backup statistics)
-        no_stats: 'true'
+# Since restic 0.17 getting the statistics is much faster and it is always
+# enabled. This configuration only applies for backups performed with an old
+# version of the Restic client.
+        no_legacy_stats: 'true'
 # Do not collect the number of locks. Default is 'false' (collect the number of
 # locks)
         no_locks: 'false'

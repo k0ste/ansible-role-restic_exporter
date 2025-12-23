@@ -1,7 +1,7 @@
 ---
 - name: "restic_exporter | Install the required packages in Redhat derivatives"
   when:
-    - "hostvars[inventory_hostname]['ansible_os_family'] == 'RedHat'"
+    - "hostvars[inventory_hostname]['ansible_facts']['os_family'] == 'RedHat'"
   block:
     - name: "restic_exporter | Update dnf cache"
       ansible.builtin.dnf:
@@ -9,10 +9,11 @@
     - name: "restic_exporter | Install package with dnf"
       ansible.builtin.dnf:
         name: "{{ hostvars[inventory_hostname]['restic_exporter_package'] }}"
-        state: "present"
+        state: "{{ lookup('ansible.builtin.vars',
+          'restic_exporter_package_state') }}"
 - name: "restic_exporter | Install the required packages in Debian derivatives"
   when:
-    - "hostvars[inventory_hostname]['ansible_os_family'] == 'Debian'"
+    - "hostvars[inventory_hostname]['ansible_facts']['os_family'] == 'Debian'"
   block:
     - name: "restic_exporter | Update apt cache"
       ansible.builtin.apt:
@@ -20,11 +21,13 @@
     - name: "restic_exporter | Install package with apt"
       ansible.builtin.apt:
         name: "{{ hostvars[inventory_hostname]['restic_exporter_package'] }}"
-        state: "present"
+        state: "{{ lookup('ansible.builtin.vars',
+          'restic_exporter_package_state') }}"
 - name: "restic_exporter | Install the required packages in ArchLinux
     derivatives"
   when:
-    - "hostvars[inventory_hostname]['ansible_os_family'] == 'Archlinux'"
+    - "hostvars[inventory_hostname]['ansible_facts']['os_family'] ==
+      'Archlinux'"
   block:
     - name: "restic_exporter | Update pacman cache"
       community.general.pacman:
@@ -32,4 +35,5 @@
     - name: "restic_exporter | Install package with pacman"
       community.general.pacman:
         name: "{{ hostvars[inventory_hostname]['restic_exporter_package'] }}"
-        state: "present"
+        state: "{{ lookup('ansible.builtin.vars',
+          'restic_exporter_package_state') }}"

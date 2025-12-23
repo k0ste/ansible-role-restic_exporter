@@ -16,11 +16,11 @@
     enabled: "yes"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
+    - "hostvars[inventory_hostname]['restic_exporter']
+      not in ['', [], '[]', None]"
     - "hostvars[inventory_hostname]['restic_exporter'] |
-       community.general.json_query(vars['restic_exporter_enable']) is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] |
-       community.general.json_query(vars['restic_exporter_enable']) == 'true'"
+       community.general.json_query(lookup('ansible.builtin.vars',
+       'restic_exporter_enable', default='')) == 'true'"
   vars:
     restic_exporter_enable: "[] | map(&enable || 'false', @) | [0]"
 - name: "restic_exporter | Ensure docker is run"
@@ -30,10 +30,10 @@
     enabled: "yes"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
+    - "hostvars[inventory_hostname]['restic_exporter']
+      not in ['', [], '[]', None]"
     - "hostvars[inventory_hostname]['restic_exporter'] |
-       community.general.json_query(vars['restic_exporter_enable']) is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] |
-       community.general.json_query(vars['restic_exporter_enable']) == 'true'"
+       community.general.json_query(lookup('ansible.builtin.vars',
+       'restic_exporter_enable', default='')) == 'true'"
   vars:
     restic_exporter_enable: "[] | map(&enable || 'false', @) | [0]"

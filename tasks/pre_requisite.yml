@@ -16,15 +16,40 @@
     restic_exporter_settings:
       "{{ hostvars[inventory_hostname]['restic_exporter'] |
       community.general.json_query('[].settings[]') | default(omit) }}"
+    restic_exporter_package_state:
+      "{{ hostvars[inventory_hostname]['restic_exporter'] |
+      community.general.json_query('[].package_state | [0]') | default(omit) }}"
     restic_exporter_port: "{{ hostvars[inventory_hostname]['restic_exporter'] |
-      community.general.json_query('[].settings[].port | [0]') | default(omit) }}"
+      community.general.json_query('[].settings[].port | [0]') |
+      default(omit) }}"
   when:
     - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
+    - "hostvars[inventory_hostname]['restic_exporter']
+      not in ['', [], '[]', None]"
+- name: "restic_exporter | Assert that restic_exporter package state in valid
+    value"
+  ansible.builtin.assert:
+    that:
+      - "lookup('ansible.builtin.vars', 'restic_exporter_package_state') in
+        ['present', 'latest']"
+    fail_msg: "{{ 'package_state must be in `present` or `latest`,
+      current is: ' + lookup('ansible.builtin.vars',
+      'restic_exporter_package_state') }}"
+    quiet: "true"
+  when:
+    - "lookup('ansible.builtin.vars',
+      'restic_exporter_package_state', default='') not in ['', [], '[]', None,
+      'present', 'latest']"
+- name: "restic_exporter | Set package state to 'present' cause value is not
+    defined"
+  ansible.builtin.set_fact:
+    restic_exporter_package_state: "present"
+  when:
+    - "lookup('ansible.builtin.vars',
+      'restic_exporter_package_state', default='') in ['', [], '[]', None]"
 - name: "restic_exporter | Set facts about service port"
   ansible.builtin.set_fact:
     restic_exporter_port: "8001"
   when:
-    - "(vars['restic_exporter_port'] is defined and
-      vars['restic_exporter_port'] in ['', [], None]) or
-      vars['restic_exporter_port'] is not defined"
+    - "lookup('ansible.builtin.vars', 'restic_exporter_port', default='')
+      in ['', [], '[]', None]"

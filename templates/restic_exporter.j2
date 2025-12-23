@@ -17,17 +17,18 @@
   hostvars[inventory_hostname]['restic_exporter_docker_path'] + ' rm -f ' +
   hostvars[inventory_hostname]['restic_exporter_docker_name'] }}
 {{ 'ExecStart=' + hostvars[inventory_hostname]['restic_exporter_docker_path'] +
-  ' run -p ' ~ vars['restic_exporter_port'] ~ ':' ~
-  vars['restic_exporter_port'] ~ ' --pull always --name ' +
+  ' run -p ' ~ lookup('ansible.builtin.vars', 'restic_exporter_port') ~ ':' ~
+  lookup('ansible.builtin.vars', 'restic_exporter_port') ~
+  ' --pull always --name ' +
   hostvars[inventory_hostname]['restic_exporter_docker_name'] -}}
-{% if vars['restic_exporter_settings'] is defined and
-  vars['restic_exporter_settings'] not in ['', [], None] %}
-{% for r in vars['restic_exporter_settings'] %}
+{% if lookup('ansible.builtin.vars', 'restic_exporter_settings', default='')
+  not in ['', [], '[]', None] %}
+{% for r in lookup('ansible.builtin.vars', 'restic_exporter_settings') %}
 {% include 'restic_settings.j2' %}
 {% endfor %}
 {% endif %}
 {{ ' ngosang/' + hostvars[inventory_hostname]['restic_exporter_docker_name'] +
-  ':' + vars['restic_exporter_version'] }}
+  ':' + lookup('ansible.builtin.vars', 'restic_exporter_version') }}
 {{ 'ExecStop=' + hostvars[inventory_hostname]['restic_exporter_docker_path'] +
   ' stop ' + hostvars[inventory_hostname]['restic_exporter_docker_name'] }}
 {{ 'SyslogIdentifier=' +

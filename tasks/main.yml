@@ -6,11 +6,11 @@
   ansible.builtin.include_tasks:
     file: "packages.yml"
   when:
-    - "hostvars[inventory_hostname]['restic_exporter'] is defined"
-    - "hostvars[inventory_hostname]['restic_exporter'] not in ['', [], None]"
+    - "lookup('ansible.builtin.vars', 'restic_exporter_settings', default='')
+      not in ['', [], '[]', None]"
 - name: "restic_exporter | Include deployment tasks"
   ansible.builtin.include_tasks:
     file: "deploy.yml"
   when:
-    - "vars['restic_exporter_settings'] is defined"
-    - "vars['restic_exporter_settings'] not in ['', [], None]"
+    - "lookup('ansible.builtin.vars', 'restic_exporter_settings', default='')
+      not in ['', [], '[]', None]"
